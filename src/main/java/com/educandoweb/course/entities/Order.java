@@ -6,6 +6,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import com.educandoweb.course.entities.enums.OrderStatus;
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
@@ -26,8 +27,10 @@ public class Order implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
+
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'", timezone = "GMT")
 	private Instant moment;
-	
+
 	private Integer orderStatus;
 
 	@ManyToOne
@@ -36,10 +39,10 @@ public class Order implements Serializable {
 
 	@OneToMany(mappedBy = "id.order")
 	private Set<OrderItem> items = new HashSet<>();
-	
+
 	@OneToOne(mappedBy = "order", cascade = CascadeType.ALL)
 	private Payment payment;
-	
+
 	public Order() {
 	}
 
@@ -84,7 +87,7 @@ public class Order implements Serializable {
 			this.orderStatus = orderStatus.getCode();
 		}
 	}
-	
+
 	public Payment getPayment() {
 		return payment;
 	}
@@ -92,7 +95,7 @@ public class Order implements Serializable {
 	public void setPayment(Payment payment) {
 		this.payment = payment;
 	}
-	
+
 	public Set<OrderItem> getItems() {
 		return items;
 	}
@@ -104,7 +107,7 @@ public class Order implements Serializable {
 		}
 		return sum;
 	}
-	
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
